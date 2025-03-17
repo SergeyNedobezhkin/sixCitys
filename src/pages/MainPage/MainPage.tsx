@@ -3,10 +3,8 @@ import { Helmet } from 'react-helmet-async';
 import Header from '../../components/App/Header/Header';
 import { OfferList } from '../../components/OffersList';
 import { Offer, OfferPreview } from '../../types/offers.types';
-
 import Map from '../../components/Maps/Map/Map';
 import { CityTypes, } from '../../types/city.types';
-import PointsList from '../../components/Maps/PointsList/PointsList';
 
 
 interface MainPageProps {
