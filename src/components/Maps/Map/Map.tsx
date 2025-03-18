@@ -9,7 +9,7 @@ import { OfferPreview, } from '../../../types/offers.types';
 type MapProps = {
   city: CityTypes,
   offers: OfferPreview[],
-  selectedPoint: any,
+  specialOfferId: any,
 
 }
 
@@ -25,7 +25,7 @@ const currentCustomIcon = leaflet.icon({
   iconAnchor: [20, 40],
 });
 
-function Map({ city, offers, selectedPoint, }: MapProps) {
+function Map({ city, offers, specialOfferId }: MapProps) {
   const mapRef = useRef(null);
   const map = useMap({ mapRef, city });
 
@@ -43,7 +43,7 @@ function Map({ city, offers, selectedPoint, }: MapProps) {
 
           marker
             .setIcon(
-              selectedPoint && selectedPoint === offer.title
+              specialOfferId && specialOfferId === offer.id
                 ? currentCustomIcon
                 : defaultCustomIcon
             )
@@ -54,7 +54,7 @@ function Map({ city, offers, selectedPoint, }: MapProps) {
         map.removeLayer(markerLayer);
       };
     }
-  }, [map, offers, selectedPoint]);
+  }, [map, offers, specialOfferId]);
   return (
     <section style={{ height: '100%', width: '100%', position: 'relative' }} className="cities__map map" ref={mapRef} />
   );

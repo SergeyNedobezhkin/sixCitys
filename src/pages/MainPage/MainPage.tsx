@@ -13,9 +13,11 @@ interface MainPageProps {
 }
 
 function MainPage({ offers, city }: MainPageProps): JSX.Element {
-  const [selectedPoint, setSelectedPoint] = useState<Offer['id'] | null>(null);
+  const [hoveredOfferId, setHoveredOfferId] = useState<Offer['id'] | null>(null);
 
-  const handleListItemHover = (listItemName: any) => { };
+  const handleCardHover = (offerId: Offer['id'] | null) => {
+    setHoveredOfferId(offerId);
+  };
 
   return (
     <div className="page page--gray page--main">
@@ -93,14 +95,14 @@ function MainPage({ offers, city }: MainPageProps): JSX.Element {
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                <OfferList offers={offers} />
+                <OfferList offers={offers} onCardHover={handleCardHover} />
               </div>
             </section>
             <div className="cities__right-section">
               <Map
                 city={city}
                 offers={offers}
-                selectedPoint={selectedPoint}
+                specialOfferId={hoveredOfferId}
               />
             </div>
           </div>

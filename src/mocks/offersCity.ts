@@ -30,7 +30,7 @@ export const offersCity: OffersCity[] = [
   },
   {
     'id': '2',
-    'title': 'Beautiful & luxurious studio at great location',
+    'title': 'Beautiful & luxurious',
     'type': 'Room',
     'price': 333,
     'city': {
@@ -55,7 +55,7 @@ export const offersCity: OffersCity[] = [
   },
   {
     'id': '3',
-    'title': 'Beautiful & luxurious studio at great location',
+    'title': 'Beautiful & luxurious studio at',
     'type': 'House'
     ,
     'price': 999,
@@ -81,7 +81,7 @@ export const offersCity: OffersCity[] = [
   },
   {
     'id': '4',
-    'title': 'Beautiful & luxurious studio at great location',
+    'title': 'Beautiful & luxurious studio at gr',
     'type': 'Apartment',
     'price': 123,
     'city': {

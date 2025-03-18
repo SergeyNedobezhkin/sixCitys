@@ -1,13 +1,13 @@
 import { JSX } from 'react';
-import { Link, Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import Header from '../../components/App/Header/Header';
-import Reviews from '../../components/Reviews/Reviews';
 import { ReviewsBlock } from '../../types/reviews.types';
 import { OfferPreview } from '../../types/offers.types';
 import { AppRoute } from '../../constants/constants';
 import ReviewsList from '../../components/ReviewsList/ReviewsList';
 import Map from '../../components/Maps/Map/Map';
 import { OffersNearbyList } from '../../components/OffersNearbyList/OffersNearbyList';
+import ReviewsForm from '../../components/ReviewsForm/ReviewsForm';
 
 type OfferPageProps = {
   reviewsBlock: ReviewsBlock;
@@ -154,14 +154,14 @@ export function OfferPage({ reviewsBlock, offers, }: OfferPageProps): JSX.Elemen
               </div>
               <section className="offer__reviews reviews">
                 <ReviewsList reviewsBlock={reviewsBlock} />
-                <Reviews reviews={reviewsBlock.reviews} />
+                <ReviewsForm reviews={reviewsBlock.reviews} />
               </section>
             </div>
           </div>
           <section className="offer__map map" >  <Map
             city={offer.city}
             offers={offers}
-            selectedPoint={offer.city.location}
+            specialOfferId={offer.city.location}
           />
           </section>
 

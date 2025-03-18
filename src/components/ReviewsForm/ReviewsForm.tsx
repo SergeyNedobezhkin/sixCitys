@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from "react";
 import { ReviewsBlock } from "../../types/reviews.types";
 
 
-function Reviews({ reviews }: ReviewsBlock) {
+function ReviewsForm({ reviews }: ReviewsBlock) {
 
   const [review, setReview] = useState({
     comment: '',
@@ -150,5 +150,5 @@ function Reviews({ reviews }: ReviewsBlock) {
   )
 }
 
-export default Reviews
+export default ReviewsForm
 
