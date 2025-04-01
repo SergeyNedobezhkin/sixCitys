@@ -1,19 +1,25 @@
-import { JSX, useState } from 'react';
+import { JSX, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Header from '../../components/App/Header/Header';
 import { OfferList } from '../../components/OffersList';
-import { Offer, OfferPreview } from '../../types/offers.types';
+import { Offer } from '../../types/offers.types';
 import Map from '../../components/Maps/Map/Map';
-import { CityTypes, } from '../../types/city.types';
+import { City, CityTypes, } from '../../types/city.types';
+import {  useAppSelector } from '../../store/hook';
+import { LocationsList } from '../../components/LocationsList';
+
+
 
 
 interface MainPageProps {
-  offers: OfferPreview[],
-  city: CityTypes,
+    city: CityTypes,
 }
 
-function MainPage({ offers, city }: MainPageProps): JSX.Element {
+function MainPage({  city }: MainPageProps): JSX.Element {
   const [hoveredOfferId, setHoveredOfferId] = useState<Offer['id'] | null>(null);
+  const { cityName, offers } = useAppSelector((state) => state.offers);
+
+ const currentOffers = useMemo(() => offers.filter(({ city: { name } }) => name === cityName), [cityName, offers]);
 
   const handleCardHover = (offerId: Offer['id'] | null) => {
     setHoveredOfferId(offerId);
@@ -29,45 +35,14 @@ function MainPage({ offers, city }: MainPageProps): JSX.Element {
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
-            <ul className="locations__list tabs__list">
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Paris</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Cologne</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Brussels</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item tabs__item--active">
-                  <span>Amsterdam</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Hamburg</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Dusseldorf</span>
-                </a>
-              </li>
-            </ul>
+       <LocationsList cities={Object.values(City)}/>
           </section>
         </div>
         <div className="cities">
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{offers.length} places to stay in Amsterdam</b>
+              <b className="places__found">{currentOffers.length} places to stay in { cityName }</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
@@ -95,13 +70,16 @@ function MainPage({ offers, city }: MainPageProps): JSX.Element {
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                <OfferList offers={offers} onCardHover={handleCardHover} />
+                <OfferList 
+                offers={currentOffers}
+                 onCardHover={handleCardHover} 
+                 />
               </div>
             </section>
             <div className="cities__right-section">
               <Map
                 city={city}
-                offers={offers}
+                offers={currentOffers}
                 specialOfferId={hoveredOfferId}
               />
             </div>

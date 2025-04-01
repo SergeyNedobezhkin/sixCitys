@@ -1,7 +1,16 @@
 import { LocationTypes } from "./location.types";
 
+export enum City {
+  Cologne = 'Cologne',
+  Hamburg = 'Hamburg',
+  Dusseldorf = 'Dusseldorf',
+  Brussels = 'Brussels',
+  Paris = 'Paris',
+  Amsterdam = 'Amsterdam',
+}
+
 export type CityTypes = {
-  name: string;
+  name: City;
   location: LocationTypes
   zoom?: number
 }
