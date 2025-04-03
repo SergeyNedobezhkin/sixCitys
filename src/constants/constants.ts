@@ -12,3 +12,11 @@ export enum AuthorizationStatus {
   Auth = "AUTH",
   Unknown = "UNKNOWN",
 }
+
+export enum Sort {
+  Popular = 'Popular',
+  PriceFromLowToHigh = 'Price: low to high',
+  PriceFromHighToLow = 'Price: high to low',
+  TopRatedFirst = 'Top rated first'
+}
+

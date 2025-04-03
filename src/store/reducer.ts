@@ -1,17 +1,20 @@
 import { createReducer, } from "@reduxjs/toolkit";
 import { CityName } from "../utils/const";
-import { chengeCityAction, currentOffers } from "./action";
+import { changeSortAction, chengeCityAction,  currentOffersAction } from "./action";
 import { OfferPreview } from "../types/offers.types";
 import { offers } from "../mocks";
+import { Sort } from "../constants/constants";
 
 type InitialStateCity = {
   cityName: string;
   offers: OfferPreview[];
+  currentSort:Sort;
 }
 
 const initialStateCity:InitialStateCity ={
   cityName: CityName.Paris,
-  offers:offers
+  offers:offers,
+  currentSort:Sort.Popular,
 }
 
 
@@ -20,8 +23,11 @@ export const offersReducer  = createReducer(initialStateCity, (builder) => {
   .addCase(chengeCityAction, (state, { payload }) => {
     state.cityName = payload;
   })
-  .addCase(currentOffers, (state) => {
+  .addCase(currentOffersAction, (state) => {
     state.offers = offers;
+  })
+  .addCase(changeSortAction, (state, {payload}) => {
+    state.currentSort = payload
   });
  
 });
