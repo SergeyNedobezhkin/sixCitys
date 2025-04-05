@@ -1,13 +1,14 @@
-import { JSX, useMemo, useState } from 'react';
+import { JSX, useCallback, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Header from '../../components/App/Header/Header';
 import { OfferList } from '../../components/OffersList';
 import { Offer } from '../../types/offers.types';
 import Map from '../../components/Maps/Map/Map';
-import { City, CityTypes, } from '../../types/city.types';
+import {  CityTypes, } from '../../types/city.types';
 import {  useAppSelector } from '../../store/hook';
 import { LocationsList } from '../../components/LocationsList';
 import SortBlock from '../../components/SortBlock/SortBlock';
+import { CityName } from '../../utils/const';
 
 
 
@@ -21,11 +22,8 @@ function MainPage({  city }: MainPageProps): JSX.Element {
   const [hoveredOfferId, setHoveredOfferId] = useState<Offer['id'] | null>(null);
   const { cityName, offers } = useAppSelector((state) => state.offers);
 
- const currentOffers = useMemo(() => offers.filter(({ city: { name } }) => name === cityName), [cityName, offers]);
-
-  const handleCardHover = (offerId: Offer['id'] | null) => {
-    setHoveredOfferId(offerId);
-  };
+  const currentOffers = useMemo(() => offers.filter(({ city: { name } }) => name === cityName), [cityName, offers]);
+  const handleCardHover = useCallback((offerId: Offer['id'] | null) => {setHoveredOfferId(offerId)},[]);
 
   return (
     <div className="page page--gray page--main">
@@ -37,7 +35,7 @@ function MainPage({  city }: MainPageProps): JSX.Element {
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
-       <LocationsList cities={Object.values(City)}/>
+       <LocationsList cities={Object.values(CityName)}/>
           </section>
         </div>
         <div className="cities">
@@ -48,7 +46,7 @@ function MainPage({  city }: MainPageProps): JSX.Element {
                 <SortBlock/>
               <div className="cities__places-list places__list tabs__content">
                 <OfferList 
-                offers={currentOffers}
+                currentOffers={currentOffers}
                  onCardHover={handleCardHover} 
                  />
               </div>

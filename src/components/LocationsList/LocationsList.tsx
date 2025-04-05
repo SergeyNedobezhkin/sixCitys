@@ -1,10 +1,11 @@
-import { City } from '../../types/city.types';
+
+import { CityName } from '../../utils/const';
 import { LocationItem } from './LocatonItem';
 
 
 
 type LocationsListProps = {
-  cities: City[];
+  cities: CityName[];
 }
 
 export const LocationsList = ({ cities }: LocationsListProps) => {

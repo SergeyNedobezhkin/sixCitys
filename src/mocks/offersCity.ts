@@ -1,3 +1,4 @@
+
 import { OfferPreview } from "../types/offers.types";
 import { OffersCity } from "../types/offersCity.types";
 import { CityName } from "../utils/const";
@@ -60,9 +61,9 @@ export const offersCity: OffersCity[] = [
     ,
     'price': 999,
     'city': {
-      'name': CityName.Moscow,
+      'name': CityName.Dusseldorf,
       'location': {
-        title: CityName.Moscow,
+        title: CityName.Dusseldorf,
         'latitude': 52.35514938496378,
         'longitude': 4.673877537499948,
         'zoom': 8

@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
 import cn from 'classnames';
-import { City } from '../../../types/city.types';
 import { chengeCityAction } from '../../../store/action';
 import {  useAppDispatch, useAppSelector } from '../../../store/hook';
+import { CityName } from '../../../utils/const';
 
 
 
 type LocationItemProps = {
-    city: City;
+    city: CityName;
 }
 
 export const LocationItem = ({ city }: LocationItemProps) => {

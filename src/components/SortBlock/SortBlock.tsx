@@ -2,7 +2,7 @@ import {  useState } from 'react'
 import { Sort } from '../../constants/constants'
 import cn from 'classnames'
 import { useAppDispatch, useAppSelector } from '../../store/hook';
-import { changeSortAction } from '../../store/action';
+import { changeSortCityNameAction } from '../../store/action';
 
 
 function SortBlock() {
@@ -12,7 +12,7 @@ const currentSort = useAppSelector((state) => state.offers.currentSort);
 const onClickSort = ()=>setIsOpenSort((prev) => !prev);
 const onChangeSorting = (newSort: Sort) => {
   setIsOpenSort(!isOpenSort)
-  dispatch(changeSortAction(newSort))
+  dispatch(changeSortCityNameAction(newSort))
 };
 
   return (
