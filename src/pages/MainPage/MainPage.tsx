@@ -20,7 +20,7 @@ interface MainPageProps {
 
 function MainPage({  city }: MainPageProps): JSX.Element {
   const [hoveredOfferId, setHoveredOfferId] = useState<Offer['id'] | null>(null);
-  const { cityName, offers } = useAppSelector((state) => state.offers);
+  const { cityName, offers } = useAppSelector((state) => state.offersReducer);
 
   const currentOffers = useMemo(() => offers.filter(({ city: { name } }) => name === cityName), [cityName, offers]);
   const handleCardHover = useCallback((offerId: Offer['id'] | null) => {setHoveredOfferId(offerId)},[]);

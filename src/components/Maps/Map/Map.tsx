@@ -32,10 +32,11 @@ function Map({ city, offers, specialOfferId }: MapProps) {
   useEffect(() => {
     if (map) {
       const markerLayer = layerGroup().addTo(map);
-      offers.forEach((offer) => {
-        const pointMaps = offer.location;
+      offers?.forEach((offer) => {
+        const pointMaps = Array.from(offer?.location);
 
-        pointMaps.forEach((pointMap) => {
+
+        pointMaps?.forEach((pointMap) => {
           const marker = new Marker({
             lat: pointMap.latitude,
             lng: pointMap.longitude

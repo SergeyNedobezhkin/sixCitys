@@ -1,8 +1,15 @@
 import { createAction } from "@reduxjs/toolkit";
 
-import { Sort } from "../constants/constants";
+import { AppRoute, AuthorizationStatus, Sort } from "../constants/constants";
 import { CityName } from "../utils/const";
+import { Offer } from "../types/offers.types";
+// import { OfferPreview } from "../types/offers.types";
 
 export const chengeCityAction = createAction<CityName>('main/chengeCity');
-export const currentOffersAction = createAction('main/currentOffers');
+export const currentOffersAction = createAction<[]>('main/currentOffers');
 export const changeSortCityNameAction = createAction<Sort>('main/changeSortCityName');
+export const loadOffersAction = createAction<Offer[]>('data/loadOffers');
+export const requireAutorizationAction = createAction<AuthorizationStatus>('user/requireAutorization')
+export const setErrorAction = createAction<string | null>('sixCitys/setErrorAction');
+export const setOffersDataLoadingStatusAction = createAction<boolean>('data/setOffersDataLoadingStatusAction');
+export const redirectRoute = createAction<AppRoute>('app/redirectRoute');

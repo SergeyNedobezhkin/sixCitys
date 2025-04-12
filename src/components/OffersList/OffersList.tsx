@@ -10,9 +10,9 @@ type OfferListProps = {
   currentOffers: OfferPreview[];
   onCardHover: (offerId: OfferPreview['id'] | null) => void
 }
-export const OfferList = memo( ({ currentOffers, onCardHover }: OfferListProps) => {
-  const currentSort = useAppSelector((state)=> state.offers.currentSort)
-  
+export const OfferList = memo(({ currentOffers, onCardHover }: OfferListProps) => {
+  const currentSort = useAppSelector((state) => state.offersReducer.currentSort)
+
   const sortedOffers = useMemo(() => {
     switch (currentSort) {
       case Sort.PriceFromLowToHigh:
@@ -26,12 +26,12 @@ export const OfferList = memo( ({ currentOffers, onCardHover }: OfferListProps) 
         return currentOffers;
     }
   }, [currentSort, currentOffers]);
-  
-  
-  
-    return (
-      <>
-        {sortedOffers.map((offer) => <OfferCard block='cities' imageSizeCard="large" onCardHover={onCardHover} offer={offer} key={offer.id} />)}
-      </>
-    );
-  });
+
+
+
+  return (
+    <>
+      {sortedOffers.map((offer) => <OfferCard block='cities' imageSizeCard="large" onCardHover={onCardHover} offer={offer} key={offer.id} />)}
+    </>
+  );
+});

@@ -1,5 +1,4 @@
 import {
-  BrowserRouter,
   Route,
   Routes,
 } from "react-router-dom";
@@ -14,7 +13,10 @@ import { OfferPage } from '../../pages/OfferPage/OfferPage';
 import { ReviewsBlock } from '../../types/reviews.types';
 import { OffersCity } from '../../types/offersCity.types';
 import { CityTypes } from '../../types/city.types';
-import { Offer } from "../../types/offers.types";
+import { useAppSelector } from "../../store/hook";
+import LoaderScreen from "../LoaderScreen/LoaderScreen";
+import { BrouserHistory } from '../../BrouserHistory';
+import { HistoryRouter } from "../HistoryRoute/HistoryRoute";
 
 
 
@@ -23,23 +25,29 @@ interface AppProps {
   reviewsBlock: ReviewsBlock
   offersCity: OffersCity[]
   city: CityTypes
-  offers: Offer[]
 }
 
-function App({ reviewsBlock, offersCity, city, offers }: AppProps): JSX.Element {
+function App({ reviewsBlock, offersCity, city, }: AppProps): JSX.Element {
+  const authorizationStatus = useAppSelector((state) => state.offersReducer.authorizationStatus)
+  const isOffersDataLoading = useAppSelector((state) => state.offersReducer.isOffersDataLoading)
 
+  if (authorizationStatus === AuthorizationStatus.Unknown || isOffersDataLoading) {
+    return (
+      <LoaderScreen />
+    )
+  }
   return (
     <HelmetProvider>
-      <BrowserRouter >
+      <HistoryRouter history={BrouserHistory}>
         <Routes>
           <Route
             path={AppRoute.Main}
-            element={<MainPage offers={offers} city={city} />}
+            element={<MainPage city={city} />}
           />
           <Route
             path={AppRoute.Login}
             element={
-              <PrivateRoutes redirectTo={AppRoute.Login} authorizationStatus={AuthorizationStatus.NoAuth}>
+              <PrivateRoutes redirectTo={AppRoute.Main} authorizationStatus={AuthorizationStatus.NoAuth}>
                 <LoginPage />
               </PrivateRoutes>
             }
@@ -51,10 +59,10 @@ function App({ reviewsBlock, offersCity, city, offers }: AppProps): JSX.Element 
                 <FavoritesPage offersCity={offersCity} />
               </PrivateRoutes>
             } />
-          <Route path={`${AppRoute.Offer}`} element={<OfferPage offers={offers} reviewsBlock={reviewsBlock} />} />
+          <Route path={`${AppRoute.Offer}`} element={<OfferPage reviewsBlock={reviewsBlock} />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </BrowserRouter>
+      </HistoryRouter>
     </HelmetProvider>
 
   );

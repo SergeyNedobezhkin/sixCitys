@@ -8,14 +8,16 @@ import ReviewsList from '../../components/ReviewsList/ReviewsList';
 import Map from '../../components/Maps/Map/Map';
 import { OffersNearbyList } from '../../components/OffersNearbyList/OffersNearbyList';
 import ReviewsForm from '../../components/ReviewsForm/ReviewsForm';
+import { useAppSelector } from '../../store/hook';
 
 type OfferPageProps = {
   reviewsBlock: ReviewsBlock;
-  offers: OfferPreview[];
+
 };
 
-export function OfferPage({ reviewsBlock, offers, }: OfferPageProps): JSX.Element {
+export function OfferPage({ reviewsBlock,  }: OfferPageProps): JSX.Element {
   const { offerId } = useParams();
+  const offers = useAppSelector((state)=>state.offersReducer.offers as  OfferPreview[])
   const offer = offers?.find((offer) => offer.id === offerId);
 
   if (!offer) {

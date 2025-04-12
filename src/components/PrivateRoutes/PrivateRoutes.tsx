@@ -1,18 +1,20 @@
 import { Navigate } from 'react-router-dom'
-import { AuthorizationStatus } from '../../constants/constants'
+import { AppRoute, AuthorizationStatus } from '../../constants/constants'
+import { useAppSelector } from '../../store/hook';
 
 type PrivateRoutesProps = {
   children: any,
   authorizationStatus: AuthorizationStatus,
   redirectTo: string
 }
-function PrivateRoutes({ children, authorizationStatus, redirectTo }: PrivateRoutesProps) {
 
-  return (
-    <div>
-      {authorizationStatus === AuthorizationStatus.Auth ? children : <Navigate to={redirectTo} />}
-    </div>
-  )
+export function PrivateRoutes({
+  children,
+  authorizationStatus = AuthorizationStatus.NoAuth,
+  redirectTo = AppRoute.Login
+}: PrivateRoutesProps) {
+  const userStatus = useAppSelector((state) => state.offersReducer.authorizationStatus);
+  return userStatus === authorizationStatus ? children : <Navigate to={redirectTo} />;
 }
 
 export default PrivateRoutes
