@@ -3,7 +3,7 @@ import { AppDispatch, State } from "../types/state.types";
 import { AxiosInstance, } from "axios";
 import { Offer } from "../types/offers.types";
 import { APIRoute, TIMEOUT_SHOW_ERROR } from "../utils/const";
-import { loadOffersAction, redirectRoute, requireAutorizationAction, setErrorAction, setOffersDataLoadingStatusAction } from "./action";
+import { currentOfferAction, loadOffersAction, redirectRoute, requireAutorizationAction, setErrorAction, setOffersDataLoadingStatusAction } from "./action";
 import { AppRoute, AuthorizationStatus } from "../constants/constants";
 import { dropToken, saveToken } from "../services/token";
 import { AuthData, UserData } from "../types/user.types";
@@ -21,6 +21,23 @@ export const fetchOffersAction = createAsyncThunk<void, undefined, {
     dispatch(loadOffersAction(data))
   },
 );
+
+export const fetchCurrentOfferAction = createAsyncThunk<void, string, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance
+}>('data/fetchCurrentOffer',
+  async (offerId, { dispatch, extra: api }) => {
+    try {
+      const { data } = await api.get<Offer>(`${APIRoute.Offers}${offerId}/`);
+      dispatch(currentOfferAction(data));
+    } catch (error) {
+      dispatch(setErrorAction('Ошибка загрузки оффера'));
+      throw error;
+    }
+  }
+);
+
 
 export const checkAuthAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch,

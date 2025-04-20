@@ -11,7 +11,7 @@ export enum CityName {
 }
 
 export enum APIRoute {
-  Offers = '/offers',
+  Offers = '/offers/',
   Login = '/login',
   Logout = '/logout'
 }

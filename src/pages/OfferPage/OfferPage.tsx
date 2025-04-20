@@ -1,27 +1,37 @@
-import { JSX } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
+import { JSX, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Header from '../../components/App/Header/Header';
 import { ReviewsBlock } from '../../types/reviews.types';
 import { OfferPreview } from '../../types/offers.types';
-import { AppRoute } from '../../constants/constants';
+
 import ReviewsList from '../../components/ReviewsList/ReviewsList';
 import Map from '../../components/Maps/Map/Map';
 import { OffersNearbyList } from '../../components/OffersNearbyList/OffersNearbyList';
 import ReviewsForm from '../../components/ReviewsForm/ReviewsForm';
-import { useAppSelector } from '../../store/hook';
+import { useAppDispatch, useAppSelector } from '../../store/hook';
+
+import { fetchCurrentOfferAction } from '../../store/api-actions';
+import LoaderScreen from '../../components/LoaderScreen/LoaderScreen';
 
 type OfferPageProps = {
   reviewsBlock: ReviewsBlock;
-
 };
 
-export function OfferPage({ reviewsBlock,  }: OfferPageProps): JSX.Element {
+export function OfferPage({ reviewsBlock, }: OfferPageProps): JSX.Element {
+  const dispatch = useAppDispatch()
   const { offerId } = useParams();
-  const offers = useAppSelector((state)=>state.offersReducer.offers as  OfferPreview[])
-  const offer = offers?.find((offer) => offer.id === offerId);
+  const offer = useAppSelector((state) => state.offersReducer.offer)
+  const offers = useAppSelector((state) => state.offersReducer.offers as OfferPreview[]);
+
+  useEffect(() => {
+    if (offerId) {
+      dispatch(fetchCurrentOfferAction(offerId));
+
+    }
+  }, [dispatch, offerId]);
 
   if (!offer) {
-    return <Navigate to={AppRoute.NotFound} />
+    return <LoaderScreen />
   }
 
   return (
@@ -82,7 +92,8 @@ export function OfferPage({ reviewsBlock,  }: OfferPageProps): JSX.Element {
               </div>
               <div className="offer__name-wrapper">
                 <h1 className="offer__name">
-                  Beautiful &amp; luxurious studio at great location
+                  {/* Beautiful &amp; luxurious studio at great location */}
+                  {offer?.description}
                 </h1>
                 <button className="offer__bookmark-button button" type="button">
                   <svg className="offer__bookmark-icon" width={31} height={33}>
@@ -96,7 +107,7 @@ export function OfferPage({ reviewsBlock,  }: OfferPageProps): JSX.Element {
                   <span style={{ width: '80%' }} />
                   <span className="visually-hidden">Rating</span>
                 </div>
-                <span className="offer__rating-value rating__value">{offer.rating}</span>
+                <span className="offer__rating-value rating__value">{offer?.rating}</span>
               </div>
               <ul className="offer__features">
                 <li className="offer__feature offer__feature--entire">Apartment</li>
@@ -108,7 +119,7 @@ export function OfferPage({ reviewsBlock,  }: OfferPageProps): JSX.Element {
                 </li>
               </ul>
               <div className="offer__price">
-                <b className="offer__price-value">€120</b>
+                <b className="offer__price-value">€{offer?.price}</b>
                 <span className="offer__price-text">&nbsp;night</span>
               </div>
               <div className="offer__inside">
@@ -160,17 +171,17 @@ export function OfferPage({ reviewsBlock,  }: OfferPageProps): JSX.Element {
               </section>
             </div>
           </div>
-          <section className="offer__map map" >  <Map
-            city={offer.city}
-            offers={offers}
-            specialOfferId={offer.city.location}
-          />
+          <section className="offer__map map" >
+            <Map
+              city={offer?.city}
+              offers={offers}
+              specialOfferId={offer.city.location}
+            />
           </section>
 
         </section>
         <OffersNearbyList offers={offers} />
       </main>
     </div>
-
   );
 }

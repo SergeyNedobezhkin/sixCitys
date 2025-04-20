@@ -7,6 +7,7 @@ import { Offer } from "../types/offers.types";
 
 export const chengeCityAction = createAction<CityName>('main/chengeCity');
 export const currentOffersAction = createAction<[]>('main/currentOffers');
+export const currentOfferAction = createAction<null | Offer>('offer/currentOffer');
 export const changeSortCityNameAction = createAction<Sort>('main/changeSortCityName');
 export const loadOffersAction = createAction<Offer[]>('data/loadOffers');
 export const requireAutorizationAction = createAction<AuthorizationStatus>('user/requireAutorization')
