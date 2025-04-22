@@ -1,39 +1,37 @@
 import { JSX, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '../../components/App/Header/Header';
-import { ReviewsBlock } from '../../types/reviews.types';
 import { OfferPreview } from '../../types/offers.types';
-
 import ReviewsList from '../../components/ReviewsList/ReviewsList';
 import Map from '../../components/Maps/Map/Map';
 import { OffersNearbyList } from '../../components/OffersNearbyList/OffersNearbyList';
-import ReviewsForm from '../../components/ReviewsForm/ReviewsForm';
+
 import { useAppDispatch, useAppSelector } from '../../store/hook';
 
-import { fetchCurrentOfferAction } from '../../store/api-actions';
+import { fetchCurrentOfferAction, fetchReviewsBlockAction } from '../../store/api-actions';
 import LoaderScreen from '../../components/LoaderScreen/LoaderScreen';
+import { Review } from '../../types/reviews.types';
+import ReviewsForm from '../../components/ReviewsForm/ReviewsForm';
 
-type OfferPageProps = {
-  reviewsBlock: ReviewsBlock;
-};
-
-export function OfferPage({ reviewsBlock, }: OfferPageProps): JSX.Element {
+export function OfferPage(): JSX.Element {
   const dispatch = useAppDispatch()
   const { offerId } = useParams();
   const offer = useAppSelector((state) => state.offersReducer.offer)
   const offers = useAppSelector((state) => state.offersReducer.offers as OfferPreview[]);
+  const reviewsBlock = useAppSelector((state) => state.offersReducer.reviewsBlock as Review[]);
+
 
   useEffect(() => {
     if (offerId) {
       dispatch(fetchCurrentOfferAction(offerId));
-
+      dispatch(fetchReviewsBlockAction(offerId));
     }
   }, [dispatch, offerId]);
 
   if (!offer) {
     return <LoaderScreen />
   }
-
+  console.log(reviewsBlock);
   return (
     <div className="page">
       <Header />
@@ -166,8 +164,14 @@ export function OfferPage({ reviewsBlock, }: OfferPageProps): JSX.Element {
                 </div>
               </div>
               <section className="offer__reviews reviews">
-                <ReviewsList reviewsBlock={reviewsBlock} />
-                <ReviewsForm reviews={reviewsBlock.reviews} />
+                <h2 className="reviews__title">
+                  Reviews · {reviewsBlock.length > 0 ? <span className="reviews__amount">{reviewsBlock.length}</span> : 0}
+                </h2>
+                {reviewsBlock.map((review) => {
+
+                  return (<ReviewsList review={review} />)
+                })}
+                <ReviewsForm />
               </section>
             </div>
           </div>

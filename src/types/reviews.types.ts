@@ -1,14 +1,14 @@
 
 export type Review = {
-  id: number;
-  name: string;
+  id: string;
   avatar: string;
   rating: number;
   date: any;
   comment: string;
+  user: {
+    avatarUrl: string;
+    isPro: boolean;
+    name: string
+  }
 }
 
-export type ReviewsBlock = {
-  reviewsCount?: number;
-  reviews: Review[];
-}

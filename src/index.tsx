@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/App/App';
 import { Provider } from 'react-redux';
-import { offersCity, reviewsBlock, } from './mocks';
+import { offersCity, } from './mocks';
 import { city } from './mocks/city';
 import { store } from './store';
 import ErrorMessage from './components/ErrorMessage/ErrorMessage';
@@ -22,7 +22,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <ErrorMessage />
-      <App city={city} offersCity={offersCity} reviewsBlock={reviewsBlock} />
+      <App city={city} offersCity={offersCity} />
     </Provider>
   </React.StrictMode>
 );

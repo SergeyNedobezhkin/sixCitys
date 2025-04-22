@@ -3,11 +3,16 @@ import { createAction } from "@reduxjs/toolkit";
 import { AppRoute, AuthorizationStatus, Sort } from "../constants/constants";
 import { CityName } from "../utils/const";
 import { Offer } from "../types/offers.types";
+import { Review } from "../types/reviews.types";
+
 // import { OfferPreview } from "../types/offers.types";
 
 export const chengeCityAction = createAction<CityName>('main/chengeCity');
 export const currentOffersAction = createAction<[]>('main/currentOffers');
+
 export const currentOfferAction = createAction<null | Offer>('offer/currentOffer');
+export const reviewsBlockAction = createAction<Review[]>('data/reviewsBlock');
+
 export const changeSortCityNameAction = createAction<Sort>('main/changeSortCityName');
 export const loadOffersAction = createAction<Offer[]>('data/loadOffers');
 export const requireAutorizationAction = createAction<AuthorizationStatus>('user/requireAutorization')

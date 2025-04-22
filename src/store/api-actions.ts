@@ -3,11 +3,13 @@ import { AppDispatch, State } from "../types/state.types";
 import { AxiosInstance, } from "axios";
 import { Offer } from "../types/offers.types";
 import { APIRoute, TIMEOUT_SHOW_ERROR } from "../utils/const";
-import { currentOfferAction, loadOffersAction, redirectRoute, requireAutorizationAction, setErrorAction, setOffersDataLoadingStatusAction } from "./action";
+import { currentOfferAction, loadOffersAction, redirectRoute, requireAutorizationAction, reviewsBlockAction, setErrorAction, setOffersDataLoadingStatusAction } from "./action";
 import { AppRoute, AuthorizationStatus } from "../constants/constants";
 import { dropToken, saveToken } from "../services/token";
 import { AuthData, UserData } from "../types/user.types";
 import { store } from ".";
+import { Review } from "../types/reviews.types";
+
 
 export const fetchOffersAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch,
@@ -33,6 +35,24 @@ export const fetchCurrentOfferAction = createAsyncThunk<void, string, {
       dispatch(currentOfferAction(data));
     } catch (error) {
       dispatch(setErrorAction('Ошибка загрузки оффера'));
+      throw error;
+    }
+  }
+);
+
+export const fetchReviewsBlockAction = createAsyncThunk<void, string, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance
+}>('data/fetchCReviewsBlock',
+  async (offerId, { dispatch, extra: api }) => {
+    try {
+      const { data } = await api.get<Review[]>(`${APIRoute.Comments}${offerId}/`);
+      console.log(data);
+
+      dispatch(reviewsBlockAction(data));
+    } catch (error) {
+      dispatch(setErrorAction('Ошибка загрузки отзывов'));
       throw error;
     }
   }

@@ -1,9 +1,10 @@
 import { ChangeEvent, useState } from "react";
-import { ReviewsBlock } from "../../types/reviews.types";
+// import { Review, } from "../../types/reviews.types";
+// import { useAppSelector } from "../../store/hook";
 
 
-function ReviewsForm({ reviews }: ReviewsBlock) {
-
+function ReviewsForm() {
+  // const reviewsBlock = useAppSelector((state) => state.offersReducer.reviewsBlock as Review[]);
   const [review, setReview] = useState({
     comment: '',
     rating: 0

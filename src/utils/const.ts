@@ -12,8 +12,9 @@ export enum CityName {
 
 export enum APIRoute {
   Offers = '/offers/',
-  Login = '/login',
-  Logout = '/logout'
+  Login = '/login/',
+  Logout = '/logout/',
+  Comments = '/comments/'
 }
 
 export const URL_MARKER_DEFAULT = 'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/pin.svg';

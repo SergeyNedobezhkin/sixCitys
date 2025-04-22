@@ -10,7 +10,6 @@ import { AppRoute, AuthorizationStatus } from '../../constants/constants';
 import PrivateRoutes from '../PrivateRoutes/PrivateRoutes';
 import { HelmetProvider } from 'react-helmet-async';
 import { OfferPage } from '../../pages/OfferPage/OfferPage';
-import { ReviewsBlock } from '../../types/reviews.types';
 import { OffersCity } from '../../types/offersCity.types';
 import { CityTypes } from '../../types/city.types';
 import { useAppSelector } from "../../store/hook";
@@ -22,12 +21,11 @@ import { HistoryRouter } from "../HistoryRoute/HistoryRoute";
 
 
 interface AppProps {
-  reviewsBlock: ReviewsBlock
   offersCity: OffersCity[]
   city: CityTypes
 }
 
-function App({ reviewsBlock, offersCity, city, }: AppProps): JSX.Element {
+function App({ offersCity, city, }: AppProps): JSX.Element {
   const authorizationStatus = useAppSelector((state) => state.offersReducer.authorizationStatus)
   const isOffersDataLoading = useAppSelector((state) => state.offersReducer.isOffersDataLoading)
 
@@ -59,7 +57,7 @@ function App({ reviewsBlock, offersCity, city, }: AppProps): JSX.Element {
                 <FavoritesPage offersCity={offersCity} />
               </PrivateRoutes>
             } />
-          <Route path={`${AppRoute.Offer}`} element={<OfferPage reviewsBlock={reviewsBlock} />} />
+          <Route path={`${AppRoute.Offer}`} element={<OfferPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </HistoryRouter>
