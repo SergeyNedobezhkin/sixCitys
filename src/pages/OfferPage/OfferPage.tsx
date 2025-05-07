@@ -8,7 +8,7 @@ import { OffersNearbyList } from '../../components/OffersNearbyList/OffersNearby
 
 import { useAppDispatch, useAppSelector } from '../../store/hook';
 
-import { fetchCurrentOfferAction, fetchReviewsBlockAction } from '../../store/api-actions';
+import { fetchCurrentOfferAction, fetchOffersNearbyListAction, fetchReviewsBlockAction } from '../../store/api-actions';
 import LoaderScreen from '../../components/LoaderScreen/LoaderScreen';
 import { Review } from '../../types/reviews.types';
 import ReviewsForm from '../../components/ReviewsForm/ReviewsForm';
@@ -19,19 +19,24 @@ export function OfferPage(): JSX.Element {
   const offer = useAppSelector((state) => state.offersReducer.offer)
   const offers = useAppSelector((state) => state.offersReducer.offers as OfferPreview[]);
   const reviewsBlock = useAppSelector((state) => state.offersReducer.reviewsBlock as Review[]);
+  const offersNearbyList = useAppSelector((state) => state.offersReducer.offersNearbyList as any[]);
+  //Необходимо
+  // 3. Напишите всю необходимую логику для отправки комментария на сервер. Информация о взаимодействии с сервером приведена в техническом задании. В случае успешной отправки, комментарий появляется в списке комментариев.
 
+  // 4.На странице «Offer» доработайте отображение формы отправки нового комментария. Форма должна отображаться только для авторизованных пользователей.
 
   useEffect(() => {
     if (offerId) {
       dispatch(fetchCurrentOfferAction(offerId));
       dispatch(fetchReviewsBlockAction(offerId));
+      dispatch(fetchOffersNearbyListAction(offerId));
     }
   }, [dispatch, offerId]);
 
   if (!offer) {
     return <LoaderScreen />
   }
-  console.log(reviewsBlock);
+
   return (
     <div className="page">
       <Header />
@@ -184,7 +189,7 @@ export function OfferPage(): JSX.Element {
           </section>
 
         </section>
-        <OffersNearbyList offers={offers} />
+        <OffersNearbyList offers={offersNearbyList} />
       </main>
     </div>
   );

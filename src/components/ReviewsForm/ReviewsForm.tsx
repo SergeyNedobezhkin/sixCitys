@@ -1,14 +1,15 @@
 import { ChangeEvent, useState } from "react";
-// import { Review, } from "../../types/reviews.types";
-// import { useAppSelector } from "../../store/hook";
+import { Review, } from "../../types/reviews.types";
+import { useAppSelector } from "../../store/hook";
 
 
 function ReviewsForm() {
-  // const reviewsBlock = useAppSelector((state) => state.offersReducer.reviewsBlock as Review[]);
+  const reviewsBlock = useAppSelector((state) => state.offersReducer.reviewsBlock as Review[]);
   const [review, setReview] = useState({
     comment: '',
     rating: 0
   });
+  console.log(reviewsBlock);
 
   const changeRatingValues = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

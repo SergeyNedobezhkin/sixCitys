@@ -1,3 +1,5 @@
 import { createBrowserHistory } from 'history';
 
-export const BrouserHistory = createBrowserHistory();
+const browserHistory = createBrowserHistory();
+
+export default browserHistory;

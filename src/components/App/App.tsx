@@ -14,7 +14,7 @@ import { OffersCity } from '../../types/offersCity.types';
 import { CityTypes } from '../../types/city.types';
 import { useAppSelector } from "../../store/hook";
 import LoaderScreen from "../LoaderScreen/LoaderScreen";
-import { BrouserHistory } from '../../BrouserHistory';
+import browserHistory from '../../BrouserHistory';
 import { HistoryRouter } from "../HistoryRoute/HistoryRoute";
 
 
@@ -36,7 +36,7 @@ function App({ offersCity, city, }: AppProps): JSX.Element {
   }
   return (
     <HelmetProvider>
-      <HistoryRouter history={BrouserHistory}>
+      <HistoryRouter history={browserHistory}>
         <Routes>
           <Route
             path={AppRoute.Main}

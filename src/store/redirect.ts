@@ -1,14 +1,17 @@
 import { PayloadAction } from '@reduxjs/toolkit';
+import browserHistory from '../BrouserHistory';
 import { Middleware } from 'redux';
-import { BrouserHistory } from '../BrouserHistory';
+import { offersReducer } from './reducer';
 
 
-export const redirect: Middleware =
+type Reducer = ReturnType<typeof offersReducer>;
+
+export const redirect: Middleware<unknown, Reducer> =
   () =>
     (next) =>
       (action: PayloadAction<string>) => {
-        if (action.type === 'app/redirectRoute') {
-          BrouserHistory.push(action.payload);
+        if (action.type === 'game/redirectToRoute') {
+          browserHistory.push(action.payload);
         }
 
         return next(action);

@@ -1,6 +1,6 @@
 import { createReducer, } from "@reduxjs/toolkit";
 import { CityName } from "../utils/const";
-import { changeSortCityNameAction, chengeCityAction, currentOfferAction, currentOffersAction, loadOffersAction, requireAutorizationAction, reviewsBlockAction, setErrorAction, setOffersDataLoadingStatusAction, } from "./action";
+import { changeSortCityNameAction, chengeCityAction, currentOfferAction, currentOffersAction, loadOffersAction, offersNearbyListAction, requireAutorizationAction, reviewsBlockAction, setErrorAction, setOffersDataLoadingStatusAction, } from "./action";
 // import { OfferPreview } from "../types/offers.types";
 // import { offers } from "../mocks";
 import { AuthorizationStatus, Sort } from "../constants/constants";
@@ -15,6 +15,7 @@ type InitialStateType = {
   offers: [] | Offer[];
   offer: null | Offer,
   reviewsBlock: null | Review[],
+  offersNearbyList: null | any[],
   currentSort: Sort;
   authorizationStatus: AuthorizationStatus;
   isOffersDataLoading: boolean;
@@ -27,6 +28,7 @@ const InitialState: InitialStateType = {
   offers: [],
   offer: null,
   reviewsBlock: [],
+  offersNearbyList: [],
   authorizationStatus: AuthorizationStatus.NoAuth,
   error: null,
   isOffersDataLoading: false,
@@ -46,6 +48,9 @@ export const offersReducer = createReducer(InitialState, (builder) => {
     })
     .addCase(reviewsBlockAction, (state, action) => {
       state.reviewsBlock = action.payload
+    })
+    .addCase(offersNearbyListAction, (state, action) => {
+      state.offersNearbyList = action.payload
     })
 
     .addCase(changeSortCityNameAction, (state, { payload }) => {
