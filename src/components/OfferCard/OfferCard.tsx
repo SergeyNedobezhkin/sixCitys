@@ -32,7 +32,7 @@ function OfferCard({ offer, onCardHover, imageSizeCard = 'large', block }: Place
       {
         isPremium &&
         <div className="place-card__mark">
-          <span>{isPremium && isPremium}</span>
+          <span>{isPremium && "Premium"}</span>
         </div>
       }
       <div className={`${block}__image-wrapper place-card__image-wrapper`}>

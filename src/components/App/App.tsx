@@ -22,10 +22,9 @@ import { HistoryRouter } from "../HistoryRoute/HistoryRoute";
 
 interface AppProps {
   offersCity: OffersCity[]
-  city: CityTypes
 }
 
-function App({ offersCity, city, }: AppProps): JSX.Element {
+function App({ offersCity, }: AppProps): JSX.Element {
   const authorizationStatus = useAppSelector((state) => state.offersReducer.authorizationStatus)
   const isOffersDataLoading = useAppSelector((state) => state.offersReducer.isOffersDataLoading)
 
@@ -40,7 +39,7 @@ function App({ offersCity, city, }: AppProps): JSX.Element {
         <Routes>
           <Route
             path={AppRoute.Main}
-            element={<MainPage city={city} />}
+            element={<MainPage />}
           />
           <Route
             path={AppRoute.Login}

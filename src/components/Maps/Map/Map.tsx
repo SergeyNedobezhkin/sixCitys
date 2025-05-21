@@ -1,16 +1,13 @@
 import { useRef, useEffect } from 'react';
-import leaflet, { layerGroup, Marker, } from 'leaflet';
+import leaflet, { layerGroup, Marker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { URL_MARKER_CURRENT, URL_MARKER_DEFAULT } from '../../../utils/const';
 import useMap from '../../hooks/useMap';
-import { CityTypes, } from '../../../types/city.types';
-import { OfferPreview, } from '../../../types/offers.types';
+import { OfferPreview } from '../../../types/offers.types';
 
 type MapProps = {
-  city: CityTypes,
-  offers: OfferPreview[],
-  specialOfferId: any,
-
+  currentOffers: OfferPreview[];
+  specialOfferId: any;
 }
 
 const defaultCustomIcon = leaflet.icon({
@@ -25,39 +22,41 @@ const currentCustomIcon = leaflet.icon({
   iconAnchor: [20, 40],
 });
 
-function Map({ city, offers, specialOfferId }: MapProps) {
+function Map({ currentOffers, specialOfferId }: MapProps) {
   const mapRef = useRef(null);
-  const map = useMap({ mapRef, city });
+  const map = useMap({ mapRef, city: currentOffers[0]?.city });
 
   useEffect(() => {
     if (map) {
       const markerLayer = layerGroup().addTo(map);
-      offers?.forEach((offer) => {
-        const pointMaps = Array.from(offer?.location);
+      currentOffers.forEach((offer) => {
 
 
-        pointMaps?.forEach((pointMap) => {
-          const marker = new Marker({
-            lat: pointMap.latitude,
-            lng: pointMap.longitude
-          });
-
-          marker
-            .setIcon(
-              specialOfferId && specialOfferId === offer.id
-                ? currentCustomIcon
-                : defaultCustomIcon
-            )
-            .addTo(markerLayer);
+        const marker = new Marker({
+          lat: offer.location.latitude,
+          lng: offer.location.longitude
         });
+
+        marker
+          .setIcon(
+            specialOfferId && specialOfferId === offer.id
+              ? currentCustomIcon
+              : defaultCustomIcon
+          )
+          .addTo(markerLayer);
       });
       return () => {
         map.removeLayer(markerLayer);
       };
     }
-  }, [map, offers, specialOfferId]);
+  }, [map, currentOffers, specialOfferId]);
+
   return (
-    <section style={{ height: '100%', width: '100%', position: 'relative' }} className="cities__map map" ref={mapRef} />
+    <section
+      style={{ height: '100%', width: '100%', position: 'relative' }}
+      className="cities__map map"
+      ref={mapRef}
+    />
   );
 }
 

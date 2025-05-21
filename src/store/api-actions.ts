@@ -3,7 +3,7 @@ import { AppDispatch, State } from "../types/state.types";
 import { AxiosInstance, } from "axios";
 import { Offer } from "../types/offers.types";
 import { APIRoute, TIMEOUT_SHOW_ERROR } from "../utils/const";
-import { currentOfferAction, loadOffersAction, offersNearbyListAction, redirectRoute, requireAutorizationAction, reviewsBlockAction, setErrorAction, setOffersDataLoadingStatusAction } from "./action";
+import { currentOfferAction, loadOffersAction, newCommentReviewsBlockAction, offersNearbyListAction, redirectRoute, requireAutorizationAction, reviewsBlockAction, setErrorAction, setOffersDataLoadingStatusAction } from "./action";
 import { AppRoute, AuthorizationStatus } from "../constants/constants";
 import { dropToken, saveToken } from "../services/token";
 import { AuthData, UserData } from "../types/user.types";
@@ -59,6 +59,22 @@ export const fetchReviewsBlockAction = createAsyncThunk<void, string, {
   }
 );
 
+export const fetchNewCommentReviewsBlockAction = createAsyncThunk<void, { offerId: string, reviewData: { comment: string, rating: number } }, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: { api: AxiosInstance };
+}>('data/fetchNewCommentReviewsBlock',
+  async ({ offerId, reviewData }, { dispatch, extra: { api } }) => {
+    try {
+      const { data } = await api.post<Review[]>(`${APIRoute.Comments}${offerId}`, reviewData);
+      dispatch(newCommentReviewsBlockAction(data));
+    } catch (error) {
+      dispatch(setErrorAction('Ошибка отправки отзывова'));
+      throw error;
+    }
+  }
+);
+
 export const fetchOffersNearbyListAction = createAsyncThunk<void, string, {
   dispatch: AppDispatch,
   state: State,
@@ -67,26 +83,14 @@ export const fetchOffersNearbyListAction = createAsyncThunk<void, string, {
   async (offerId, { dispatch, extra: { api }, }) => {
     try {
       const { data } = await api.get<any[]>(`/offers/${offerId}${APIRoute.Nearby}`);
-
       dispatch(offersNearbyListAction(data));
     } catch (error) {
-      dispatch(setErrorAction('Ошибка загрузки отзывов'));
+      dispatch(setErrorAction('Ошибка загрузки cписока предложений поблизости'));
       throw error;
     }
   }
 );
 
-
-
-
-
-// const redirectMiddleware = () => next => action => {
-//   if (action.type.endsWith('/rejected')) {
-//     // Здесь можно добавить логику перенаправления для определенных ошибок
-//     // history.push('/error');
-//   }
-//   return next(action);
-// };
 
 export const checkAuthAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch,
@@ -114,7 +118,6 @@ export const loginAction = createAsyncThunk<void, AuthData, {
     try {
       const { data: { token } } = await api.post<UserData>(APIRoute.Login, { email, password });
       // const user = await api.post<UserData, AxiosResponse<any>>(APIRoute.Login, { email, password });
-      console.log("loginAction");
       saveToken(token);
       dispatch(requireAutorizationAction(AuthorizationStatus.Auth))
       dispatch(redirectRoute(AppRoute.Main));
@@ -135,7 +138,6 @@ export const logoutAction = createAsyncThunk<void, undefined,
   async (_, { dispatch, extra: { api } }) => {
     try {
       await api.delete(APIRoute.Logout)
-      console.log("loginAction");
       dropToken();
       dispatch(requireAutorizationAction(AuthorizationStatus.NoAuth))
     } catch {

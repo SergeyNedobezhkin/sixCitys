@@ -1,5 +1,5 @@
 import { JSX, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Header from '../../components/App/Header/Header';
 import { OfferPreview } from '../../types/offers.types';
 import ReviewsList from '../../components/ReviewsList/ReviewsList';
@@ -12,8 +12,11 @@ import { fetchCurrentOfferAction, fetchOffersNearbyListAction, fetchReviewsBlock
 import LoaderScreen from '../../components/LoaderScreen/LoaderScreen';
 import { Review } from '../../types/reviews.types';
 import ReviewsForm from '../../components/ReviewsForm/ReviewsForm';
+import { AppRoute, AuthorizationStatus } from '../../constants/constants';
 
 export function OfferPage(): JSX.Element {
+  const authorizationStatus = useAppSelector((state) => state.offersReducer.authorizationStatus)
+
   const dispatch = useAppDispatch()
   const { offerId } = useParams();
   const offer = useAppSelector((state) => state.offersReducer.offer)
@@ -21,8 +24,6 @@ export function OfferPage(): JSX.Element {
   const reviewsBlock = useAppSelector((state) => state.offersReducer.reviewsBlock as Review[]);
   const offersNearbyList = useAppSelector((state) => state.offersReducer.offersNearbyList as any[]);
   //Необходимо
-  // 3. Напишите всю необходимую логику для отправки комментария на сервер. Информация о взаимодействии с сервером приведена в техническом задании. В случае успешной отправки, комментарий появляется в списке комментариев.
-
   // 4.На странице «Offer» доработайте отображение формы отправки нового комментария. Форма должна отображаться только для авторизованных пользователей.
 
   useEffect(() => {
@@ -168,6 +169,7 @@ export function OfferPage(): JSX.Element {
                   </p>
                 </div>
               </div>
+
               <section className="offer__reviews reviews">
                 <h2 className="reviews__title">
                   Reviews · {reviewsBlock.length > 0 ? <span className="reviews__amount">{reviewsBlock.length}</span> : 0}
@@ -176,14 +178,24 @@ export function OfferPage(): JSX.Element {
 
                   return (<ReviewsList review={review} />)
                 })}
-                <ReviewsForm />
+                {
+                  authorizationStatus === AuthorizationStatus.Auth ?
+                    <ReviewsForm /> :
+                    <>
+                      <h2 className="reviews__title">Для отправки отзыва необходимо авторизоваться</h2>
+                      <Link
+                        style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}
+                        className="header__nav-link" to={AppRoute.Login}>
+                        <span className="header__signout">Sign in</span>
+                      </Link>
+                    </>
+                }
               </section>
             </div>
           </div>
           <section className="offer__map map" >
             <Map
-              city={offer?.city}
-              offers={offers}
+              currentOffers={offers}
               specialOfferId={offer.city.location}
             />
           </section>
@@ -191,6 +203,6 @@ export function OfferPage(): JSX.Element {
         </section>
         <OffersNearbyList offers={offersNearbyList} />
       </main>
-    </div>
+    </div >
   );
 }

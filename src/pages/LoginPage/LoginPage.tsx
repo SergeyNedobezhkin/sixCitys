@@ -15,8 +15,6 @@ export function LoginPage(): JSX.Element {
     e.preventDefault();
 
     if (formRef.current) {
-      console.log(formRef.current);
-
       const dataForm = new FormData(formRef.current);
       const loginDataInformation = Object.fromEntries(dataForm) as AuthData;
       dispatch(loginAction(loginDataInformation));

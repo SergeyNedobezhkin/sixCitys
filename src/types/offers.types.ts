@@ -13,7 +13,7 @@ export type OfferPreview = {
   type: OfferType;
   price: number;
   city: CityTypes;
-  location: LocationTypes[];
+  location: LocationTypes;
   isFavorite: boolean;
   isPremium: boolean;
   rating: number;

@@ -7,7 +7,6 @@ type FavoriteCardOfferProps = {
 }
 export const FavoriteCardOffer = ({ offer }: FavoriteCardOfferProps) => {
   const { previewImage, price, rating, title, type, isFavorite, isPremium, id, } = offer;
-  console.log(offer);
 
   return (
     <article className="favorites__card place-card">

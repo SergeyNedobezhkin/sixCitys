@@ -4,26 +4,21 @@ import Header from '../../components/App/Header/Header';
 import { OfferList } from '../../components/OffersList';
 import { Offer } from '../../types/offers.types';
 import Map from '../../components/Maps/Map/Map';
-import {  CityTypes, } from '../../types/city.types';
-import {  useAppSelector } from '../../store/hook';
+import { useAppSelector } from '../../store/hook';
 import { LocationsList } from '../../components/LocationsList';
 import SortBlock from '../../components/SortBlock/SortBlock';
 import { CityName } from '../../utils/const';
 
 
 
+function MainPage(): JSX.Element {
 
-
-interface MainPageProps {
-    city: CityTypes,
-}
-
-function MainPage({  city }: MainPageProps): JSX.Element {
   const [hoveredOfferId, setHoveredOfferId] = useState<Offer['id'] | null>(null);
   const { cityName, offers } = useAppSelector((state) => state.offersReducer);
-
   const currentOffers = useMemo(() => offers.filter(({ city: { name } }) => name === cityName), [cityName, offers]);
-  const handleCardHover = useCallback((offerId: Offer['id'] | null) => {setHoveredOfferId(offerId)},[]);
+  const handleCardHover = useCallback((offerId: Offer['id'] | null) => {
+    return setHoveredOfferId(offerId)
+  }, []);
 
   return (
     <div className="page page--gray page--main">
@@ -35,26 +30,25 @@ function MainPage({  city }: MainPageProps): JSX.Element {
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
-       <LocationsList cities={Object.values(CityName)}/>
+            <LocationsList cities={Object.values(CityName)} />
           </section>
         </div>
         <div className="cities">
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{currentOffers.length} places to stay in { cityName }</b>
-                <SortBlock/>
+              <b className="places__found">{currentOffers.length} places to stay in {cityName}</b>
+              <SortBlock />
               <div className="cities__places-list places__list tabs__content">
-                <OfferList 
-                currentOffers={currentOffers}
-                 onCardHover={handleCardHover} 
-                 />
+                <OfferList
+                  currentOffers={currentOffers}
+                  onCardHover={handleCardHover}
+                />
               </div>
             </section>
             <div className="cities__right-section">
               <Map
-                city={city}
-                offers={currentOffers}
+                currentOffers={currentOffers}
                 specialOfferId={hoveredOfferId}
               />
             </div>

@@ -1,137 +1,108 @@
-import { ChangeEvent, useState } from "react";
-import { Review, } from "../../types/reviews.types";
-import { useAppSelector } from "../../store/hook";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { Review } from "../../types/reviews.types";
+import { useAppDispatch, useAppSelector } from "../../store/hook";
+import { useParams } from "react-router-dom";
+import { fetchNewCommentReviewsBlockAction } from "../../store/api-actions";
 
+function getRatingTitle(rating: number): string {
+  switch (rating) {
+    case 5: return 'perfect';
+    case 4: return 'good';
+    case 3: return 'not bad';
+    case 2: return 'badly';
+    case 1: return 'terribly';
+    default: return '';
+  }
+}
 
 function ReviewsForm() {
+  const dispatch = useAppDispatch();
   const reviewsBlock = useAppSelector((state) => state.offersReducer.reviewsBlock as Review[]);
-  const [review, setReview] = useState({
+  const { offerId } = useParams();
+  const [newReview, setNewReview] = useState({
     comment: '',
     rating: 0
   });
-  console.log(reviewsBlock);
+
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+
+  useEffect(() => {
+    const isCommentValid = newReview.comment.length >= 50;
+    const isRatingValid = newReview.rating > 0;
+    setIsSubmitDisabled(!(isCommentValid && isRatingValid));
+  }, [newReview.comment, newReview.rating]);
 
   const changeRatingValues = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setReview({
-      ...review,
-      rating: +value
-    })
-  }
+    const value = Number(e.target.value);
+    setNewReview({
+      ...newReview,
+      rating: value
+    });
+  };
 
   const changeCommentValues = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const comment = e.target.value;
-    setReview({
-      ...review,
+    setNewReview({
+      ...newReview,
       comment: comment
-    })
-  }
+    });
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (offerId && !isSubmitDisabled) {
+      dispatch(fetchNewCommentReviewsBlockAction({
+        offerId,
+        reviewData: {
+          comment: newReview.comment,
+          rating: newReview.rating
+        }
+      })).then(() => {
+        // Сброс формы
+        setNewReview({
+          comment: '',
+          rating: 0
+        });
+      });
+    }
+  };
 
   return (
-    <form className="reviews__form form" action="#" method="post">
+    <form onSubmit={handleSubmit} className="reviews__form form" action="#" method="post">
       <label className="reviews__label form__label" htmlFor="review">
         Your review
       </label>
       <div className="reviews__rating-form form__rating">
-        <input
-          className="form__rating-input visually-hidden"
-          name="rating"
-          value={5}
-          defaultValue={5}
-          id="5-stars"
-          onChange={changeRatingValues}
-          type="radio"
-        />
-        <label
-          htmlFor="5-stars"
-          className="reviews__rating-label form__rating-label"
-          title="perfect"
-        >
-          <svg className="form__star-image" width={37} height={33}>
-            <use xlinkHref="#icon-star" />
-          </svg>
-        </label>
-        <input
-          className="form__rating-input visually-hidden"
-          name="rating"
-          defaultValue={4}
-          onChange={changeRatingValues}
-          id="4-stars"
-          type="radio"
-          value={4}
-        />
-        <label
-          htmlFor="4-stars"
-          className="reviews__rating-label form__rating-label"
-          title="good"
-        >
-          <svg className="form__star-image" width={37} height={33}>
-            <use xlinkHref="#icon-star" />
-          </svg>
-        </label>
-        <input
-          className="form__rating-input visually-hidden"
-          name="rating"
-          defaultValue={3}
-          value={3}
-          onChange={changeRatingValues}
-          id="3-stars"
-          type="radio"
-        />
-        <label
-          htmlFor="3-stars"
-          className="reviews__rating-label form__rating-label"
-          title="not bad"
-        >
-          <svg className="form__star-image" width={37} height={33}>
-            <use xlinkHref="#icon-star" />
-          </svg>
-        </label>
-        <input
-          className="form__rating-input visually-hidden"
-          name="rating"
-          defaultValue={2}
-          onChange={changeRatingValues}
-          value={2}
-          id="2-stars"
-          type="radio"
-        />
-        <label
-          htmlFor="2-stars"
-          className="reviews__rating-label form__rating-label"
-          title="badly"
-        >
-          <svg className="form__star-image" width={37} height={33}>
-            <use xlinkHref="#icon-star" />
-          </svg>
-        </label>
-        <input
-          className="form__rating-input visually-hidden"
-          name="rating"
-          defaultValue={1}
-          onChange={changeRatingValues}
-          value={1}
-          id="1-star"
-          type="radio"
-        />
-        <label
-          htmlFor="1-star"
-          className="reviews__rating-label form__rating-label"
-          title="terribly"
-        >
-          <svg className="form__star-image" width={37} height={33}>
-            <use xlinkHref="#icon-star" />
-          </svg>
-        </label>
+        {[5, 4, 3, 2, 1].map((rating) => (
+          <React.Fragment key={rating}>
+            <input
+              className="form__rating-input visually-hidden"
+              name="rating"
+              checked={newReview.rating === rating}
+              id={`${rating}-stars`}
+              onChange={changeRatingValues}
+              type="radio"
+              value={rating}
+            />
+            <label
+              htmlFor={`${rating}-stars`}
+              className="reviews__rating-label form__rating-label"
+              title={getRatingTitle(rating)}
+            >
+              <svg className="form__star-image" width={37} height={33}>
+                <use xlinkHref="#icon-star" />
+              </svg>
+            </label>
+          </React.Fragment>
+        ))}
       </div>
       <textarea
         className="reviews__textarea form__textarea"
         id="review"
         name="review"
         onChange={changeCommentValues}
-        value={review.comment}
+        value={newReview.comment}
         placeholder="Tell how was your stay, what you like and what can be improved"
-        defaultValue={''}
       />
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
@@ -143,14 +114,13 @@ function ReviewsForm() {
         <button
           className="reviews__submit form__submit button"
           type="submit"
-          disabled={false}
+          disabled={isSubmitDisabled}
         >
           Submit
         </button>
       </div>
     </form>
-  )
+  );
 }
 
-export default ReviewsForm
-
+export default ReviewsForm;

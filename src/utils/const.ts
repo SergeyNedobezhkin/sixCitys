@@ -2,7 +2,6 @@ export const TIMEOUT_SHOW_ERROR = 4000;
 
 export enum CityName {
   Paris = 'Paris',
-  Moscow = 'Moscow',
   Cologne = 'Cologne',
   Brussels = 'Brussels',
   Amsterdam = 'Amsterdam',

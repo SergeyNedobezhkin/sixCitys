@@ -12,6 +12,9 @@ export const currentOffersAction = createAction<[]>('main/currentOffers');
 
 export const currentOfferAction = createAction<null | Offer>('offer/currentOffer');
 export const reviewsBlockAction = createAction<Review[]>('data/reviewsBlock');
+export const newCommentReviewsBlockAction = createAction<any>('data/newCommentReviewsBlock');
+
+
 export const offersNearbyListAction = createAction<any[]>('data/offersNearbyList');
 
 export const changeSortCityNameAction = createAction<Sort>('main/changeSortCityName');

@@ -1,6 +1,6 @@
 import { createReducer, } from "@reduxjs/toolkit";
 import { CityName } from "../utils/const";
-import { changeSortCityNameAction, chengeCityAction, currentOfferAction, currentOffersAction, loadOffersAction, offersNearbyListAction, requireAutorizationAction, reviewsBlockAction, setErrorAction, setOffersDataLoadingStatusAction, } from "./action";
+import { changeSortCityNameAction, chengeCityAction, currentOfferAction, currentOffersAction, loadOffersAction, newCommentReviewsBlockAction, offersNearbyListAction, requireAutorizationAction, reviewsBlockAction, setErrorAction, setOffersDataLoadingStatusAction, } from "./action";
 // import { OfferPreview } from "../types/offers.types";
 // import { offers } from "../mocks";
 import { AuthorizationStatus, Sort } from "../constants/constants";
@@ -19,7 +19,6 @@ type InitialStateType = {
   currentSort: Sort;
   authorizationStatus: AuthorizationStatus;
   isOffersDataLoading: boolean;
-
 }
 
 const InitialState: InitialStateType = {
@@ -32,6 +31,7 @@ const InitialState: InitialStateType = {
   authorizationStatus: AuthorizationStatus.NoAuth,
   error: null,
   isOffersDataLoading: false,
+
 }
 
 
@@ -48,6 +48,17 @@ export const offersReducer = createReducer(InitialState, (builder) => {
     })
     .addCase(reviewsBlockAction, (state, action) => {
       state.reviewsBlock = action.payload
+    })
+    .addCase(newCommentReviewsBlockAction, (state, action) => {
+
+      if (state.reviewsBlock) {
+        // Если reviewsBlock не null, добавляем новый отзыв
+        state.reviewsBlock = [...state.reviewsBlock, action.payload];
+      } else {
+        // Если reviewsBlock null, создаем новый массив с этим отзывом
+        state.reviewsBlock = [action.payload];
+      }
+
     })
     .addCase(offersNearbyListAction, (state, action) => {
       state.offersNearbyList = action.payload
